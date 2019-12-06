@@ -12,7 +12,7 @@ module Fastlane
 
         # Compress and read bundle identifier only for .app bundle.
         compressed_package_path = nil
-        if File.extname(package_path) == '.app'
+        if File.extname(package_path) == '.app' || File.extname(package_path) == '.framework'
           compressed_package_path = "#{package_path}.zip"
           Actions.sh(
             "ditto -c -k --rsrc --keepParent \"#{package_path}\" \"#{compressed_package_path}\"",
