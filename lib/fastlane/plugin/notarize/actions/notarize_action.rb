@@ -108,10 +108,25 @@ module Fastlane
       end
 
       def self.staple(package_path)
+		if File.extname(package_path) == '.framework'
+          Actions.sh(
+            "cp -R \"#{package_path}/Versions/Current/_CodeSignature\" \"#{package_path}/Contents\""
+          )
+        end
+
         Actions.sh(
           "xcrun stapler staple \"#{package_path}\"",
           log: false
         )
+
+        if File.extname(package_path) == '.framework'
+          Actions.sh(
+            "cp \"#{package_path}/Contents/CodeResources\" \"#{package_path}/Versions/Current/_CodeSignature/CodeResources\" "
+          )
+          Actions.sh(
+            "rm -rf \"#{package_path}/Contents\""
+          )
+        end
       end
 
       def self.description
